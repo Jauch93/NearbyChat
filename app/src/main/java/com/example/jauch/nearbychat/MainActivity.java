@@ -30,6 +30,8 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static com.google.android.gms.nearby.connection.Strategy.P2P_CLUSTER;
 
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements
     {
         Nearby.Connections.stopAllEndpoints(mGoogleApiClient);
         TextView mStatusText = (TextView) findViewById(R.id.mStatusText);
-        mStatusText.setText("Verbindung abgebrochen")
+        mStatusText.setText("Verbindung abgebrochen");
     }
 
     private final EndpointDiscoveryCallback mEndpointDiscoveryCallback =
@@ -253,9 +255,9 @@ public class MainActivity extends AppCompatActivity implements
         TextView mTextInput = (TextView) findViewById(R.id.messageInput);
         CharSequence text = mTextInput.getText();
         String s = text.toString();
-        //TextFeld noch löschen!
+        mTextInput.clearComposingText();
         byte[] k;
-        k = s.getBytes();
+        k = s.getBytes(Charset.forName("UTF-8"));
 
         Payload bytePayload;
         bytePayload = Payload.fromBytes(k);
@@ -275,7 +277,8 @@ public class MainActivity extends AppCompatActivity implements
             mTextOutput.setText(s);
             byte[] received = payload.asBytes();
 
-            String message = received.toString();
+            //String message = received.toString();
+            String message = new String(received, Charset.forName("UTF-8"));
 
             mTextOutput.setText(s + ": " + message);
         }

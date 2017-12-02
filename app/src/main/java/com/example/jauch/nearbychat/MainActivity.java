@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements
     //-------------------------------------------------------------------------------Establish connection
     public void startAdvertising(View view)      //Wird in onConnected() aufgerufen
     {
-        String name = "Nearby Advertising";
+        String name = "Nearby Advertising";         //Name des Advertisers, der auf dem andern Gerät angezeigt wird.
         String serviceId = "SERVICE_ID";
 
         Nearby.Connections.startAdvertising(mGoogleApiClient,       //Ab hier wird advertising wirklich ausgeführt!
@@ -164,7 +164,11 @@ public class MainActivity extends AppCompatActivity implements
                     TextView mStatusText = (TextView) findViewById(R.id.mStatusText);
                     mStatusText.setText("An Advertiser has been found!");
 
-                    String nickname = "Jauch";
+                    String endPointName = discoveredEndpointInfo.getEndpointName();
+                    TextView messageOutput = (TextView) findViewById(R.id.messageOutput);
+                    messageOutput.setText("AdvertiserName = " + endPointName);
+
+                    String nickname = "Jauch";          //Name des Discoverers, der beim Advertiser angezeigt wird.
                     Nearby.Connections.requestConnection(mGoogleApiClient,
                             nickname,
                             endpointId,
@@ -197,6 +201,10 @@ public class MainActivity extends AppCompatActivity implements
                 public void onConnectionInitiated(String endpointId , ConnectionInfo connectionInfo) {
                     // Automatically accept the connection on both sides.
                     Nearby.Connections.acceptConnection(mGoogleApiClient, endpointId, mPayloadCallback);
+
+                    String endPointName = connectionInfo.getEndpointName();
+                    TextView messageOutput = (TextView) findViewById(R.id.messageOutput);
+                    messageOutput.setText("DiscovererName = " + endPointName);
 
                     adress = endpointId;
 
